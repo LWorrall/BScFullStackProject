@@ -11,20 +11,24 @@
         <title>Online Pixel Art</title>
         <script>
             $(window).on("load", function() {
+                // Colouring the canvas pixel with the selected colour when clicked.
+                $('#canvas').on("click", ".pixel", function() {
+                    let colour = $("#selectedColour").css("background-color");
+                    $(this).css("background-color", colour);
+                })
+
+                // Clicking one of the colours on the palette will set it as the selected colour.
                 $(".colour").on("click", function() {
-                    // let colour = $(this).css("background-color");
-                    let colour = "#FF0000";
+                    let colour = $(this).css("background-color");
                     console.log(colour);
-                    $("#selectedColour").css("background-colour", colour);
+                    $("#selectedColour").css("background-color", colour);
                 })
             })
         </script>
     </head>
     <body>
         <!-- The canvas will hold all of the pixels to draw on. -->
-        <div id="canvas">
-
-        </div>
+        <div id="canvas"></div>
 
         <!-- The tools div will hold the different tools the user can use. -->
         <br>
