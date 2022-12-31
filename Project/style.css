@@ -43,6 +43,7 @@
 }
 
 #selectedColour {
+    background-color: black;
     width: 26px;
     height: 26px;
     padding: 3px;
