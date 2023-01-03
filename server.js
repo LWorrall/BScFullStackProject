@@ -1,3 +1,4 @@
+const { createSocket } = require("dgram");
 let express = require("express");
 let http = require("http");
 let path = require("path");
@@ -14,12 +15,23 @@ app.use(express.static(path.join(__dirname, "Resources")));
 // Set up the websocket.
 let io = socketIo(server);
 
+// generate an array used for pixels.
+let canvas = []
+for (let i = 0; i < 400; i++) {
+    canvas[i] = "#000000";
+}
+
+
 // "On connection" handler.
 io.on("connection", function(socket) {
+    // Send a client the current canvas when they connect.
+    socket.emit("send canvas", canvas);
 
     // When the server receives the 'send pixel' event from a client...
     socket.on("send pixel", function(pixel) {
         console.log("Server has received a drawn pixel from a client.");
+        // Update the canvas kept by the server.
+        canvas[pixel[0]] = pixel[1];
         // ... The server will emit the 'received pixel' event to every client.
         socket.broadcast.emit("received pixel", pixel);
     });
