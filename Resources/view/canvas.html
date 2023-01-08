@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        
+        <script src="https://cdn.socket.io/4.5.4/socket.io.min.js" integrity="sha384-/KNQL8Nu5gCHLqwqfQjA689Hhoqgi2S84SNUxC3roTe4EhJ9AfLkp8QiQcU8AMzI" crossorigin="anonymous"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+        
+        <link rel="stylesheet" href="../style.css" />
+
+        <title>Online Pixel Art</title>
+    </head>
+    <body>
+        <header>
+            <h1>Online Pixel Art</h1>
+        </header>
+
+        <nav>
+            <ul id="nav">
+                <li class="navlink"><a href="/view/home.html">Home</a></li>
+                <li class="navlink"><a href="/view/canvas.html">Canvas</a></li>
+                <li class="navlink"><a href="/view/login.html">Log In</a></li>
+                <li class="navlink"><a href="/view/register.html">Register</a></li>
+            </ul>
+        </nav>
+
+        <section>
+            <div id="logInPopup">
+
+            </div> 
+            <!-- The canvas will hold all of the pixels to draw on. -->
+            <div id="canvas"></div>
+
+            <!-- The tools div will hold the different tools the user can use. -->
+            <br>
+            <div id="tools">
+                <p>Tools</p>
+                <!-- Current colour the user has selected. -->
+                <div class="currentColour">
+                    <p> Current Colour</p>
+                    <div id="selectedColour"></div>
+                </div>
+                <!-- Colours that the user can select from. -->
+                <div class="palette">
+                    <p>Colours</p>
+                    <div class="colour" id="black" style="background-color: #000000"></div>
+                    <div class="colour" id="white" style="background-color: #FFFFFF"></div>
+                    <div class="colour" id="red" style="background-color: #ff0000"></div>
+                    <div class="colour" id="yellow" style="background-color: #fffb00"></div>
+                    <div class="colour" id="green" style="background-color: #00ff00"></div>
+                    <div class="colour" id="blue" style="background-color: #0000ff"></div>
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            
+        </footer>
+        
+        <!-- Script. -->
+        <script src="../canvas.js"></script>
+    </body>
+</html>
