@@ -1,17 +1,72 @@
+#logo {
+    display: inline;
+    float: left;
+}
+
+#headerTitle {   
+    text-align: left;
+    display: inline;
+    margin: 0px;
+}
+
+header {
+    background-color: whitesmoke;
+    height: 52px;
+}
 #nav {
+    list-style-type: none;
     display: block;
-    padding: 8px;
-    background-color: #dddddd;
+    padding: 0px;
+    margin: 0px;
+    overflow: hidden;
+    background-color: #505F62;
+}
+
+.navcontainer {
+    float: left;
 }
 
 .navlink {
-    display: inline;
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
 }
 
+li a:hover:not(.active) {
+    background-color: #111;
+}
+
+.active {
+   background-color: #04AA6D;
+}
+
+#account {
+    cursor: pointer;
+}
+
+#usercontainer {
+    display: inline;
+    float: right;
+}
+#usernametag {
+    color: white;
+    display: inherit;
+    float: left;
+    margin: 0px;
+}
+#logoutButton {
+    display: inline;
+    float: right;
+}
+
+
 body {
-    background-color: grey;
+    background-color: lightgrey;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 
-.error{ color: red }
+#loginResponseMessage { color: red; }
+.error{ color: red; }
 .success{ color: green; }

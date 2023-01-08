@@ -12,15 +12,15 @@
     </head>
     <body>
         <header>
-            <h1>Online Pixel Art</h1>
+            <img src="../style/logo52.png" alt="Logo" id="logo">
+            <h1 id="headerTitle">Online Pixel Art</h1>
         </header>
 
         <nav>
             <ul id="nav">
-                <li class="navlink"><a href="/view/home.html">Home</a></li>
-                <li class="navlink"><a href="/view/canvas.html">Canvas</a></li>
-                <li class="navlink"><a href="/view/login.html">Log In</a></li>
-                <li class="navlink"><a href="/view/register.html">Register</a></li>
+                <li class="navcontainer"><a class="navlink" href="/view/home.html">Home</a></li>
+                <li class="navcontainer"><a class="navlink" href="/view/canvas.html">Canvas</a></li>
+                <li class="navcontainer"><a class="navlink active" id="account" href>Account</a></li>
                 <button id="logoutButton">Log Out</button>
             </ul>
         </nav>
@@ -29,7 +29,7 @@
             <h1>Log In</h1>
             <p>Log in to your account.</p>
             <hr>
-            <p id="responseMessage"></p>
+            <p id="loginResponseMessage"></p>
             <label for="username"><b>Username</b></label>
             <input type="text" placeholder="Enter Username" name="username" id="username" required><br>
             <label for="password"><b>Password</b></label>

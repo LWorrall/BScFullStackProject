@@ -18,17 +18,20 @@
 
         <nav>
             <ul id="nav">
-                <li class="navcontainer"><a class="navlink" href="/view/home.html">Home</a></li>
+                <li class="navcontainer active"><a class="navlink" href="/view/home.html">Home</a></li>
                 <li class="navcontainer"><a class="navlink" href="/view/canvas.html">Canvas</a></li>
-                <li class="navcontainer"><a class="navlink" id="account" href>Account</a></li>
-            </ul>
+                <li class="navcontainer"><a class="navlink active" id="account">Account</a></li>
+
+                <div id="usercontainer">
+                    <p id="usernametag"></p>
+                    <button id="logoutButton">Log Out</button>
+                </div>
+            </ul>            
         </nav>
 
         <section>
-            <h1>Logged Out</h1>
-            <p>You have successfully logged out.</p>
-            <hr>
-            <a href="/view/login.html">Log back in</a>.
+            <h1>Account</h1>
+            <p></p>
         </section>
 
         <footer>
@@ -36,7 +39,6 @@
         </footer>
 
         <!-- Script. -->
-        <script src="../script/register.js"></script>
         <script src="../script/default.js"></script>
     </body>
 </html>

@@ -15,8 +15,16 @@ $(window).on("load", function() {
         });
     });
 
+    $("#account").on("click", function () {
+        if (localStorage.getItem('loggedInFlag') != 'true')
+        window.location.replace("login.html")
+        else
+            window.location.replace("account.html");
+    });
+
     // Hide the log out button if the user is not logged in.
-    if (localStorage.getItem('loggedInFlag') != 'true') {
-        $("#logoutButton").css("display","none");
-    }
+    if (localStorage.getItem('loggedInFlag') != 'true')
+    $("#logoutButton").css("display","none");
+    else
+        $("#usernametag").text(localStorage.loggedInUser);
 });

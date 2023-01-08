@@ -27,20 +27,17 @@ $(window).on("load", function() {
         // Colouring the canvas pixel with the selected colour when clicked.
         $('#canvas').on("click", ".pixel", function() {
             if (localStorage.loggedInFlag != 'true') {
-                alert("You must be logged in to do that!");
+                alert("You must be logged in to draw.");
             } else if ($(this).css("background-color") == $("#selectedColour").css("background-color")) {
                 // Don't do anything if the pixel is already the selected colour.
             } else {
-                console.log(localStorage.pixelsDrawnThisSession);
-                localStorage.pixelsDrawnThisSession = Number(localStorage.pixelsDrawnThisSession) + 1;
+                localStorage.pixelsDrawnThisSession++;
                 $("#pixelsDrawnCounter").text(localStorage.pixelsDrawnThisSession);
                 let colour = $("#selectedColour").css("background-color");
                 $(this).css("background-color", colour);
                 // The function will then update the canvas array with the pixel's new colour.
                 let index = $(this).attr('id').slice(6);
-                console.log(index);
-                canvas[index] = colour;
-        
+                canvas[index] = colour;     
                 // Send this to the server.
                 let pixel = [index, colour];
                 socket.emit("send pixel", pixel);

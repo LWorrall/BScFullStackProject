@@ -104,6 +104,7 @@ io.on("connection", function(socket) {
                 if (res == null) {
                     // If the query returns null, then the user logging in does not exist in the database.
                     console.log(`User '${user[0]}' does not exist.`);
+                    socket.emit("incorrect login", "Incorrect username or password.");
                 } else {
                     // The query matches a user in the database, they can log in.
                     console.log(`User '${res}' has logged in.`);
@@ -119,7 +120,7 @@ io.on("connection", function(socket) {
         console.log(`User ${user[0]} has logged out.`);
         console.log(`Number of pixels they drew whilst logged in: ${user[1]}.`)
         let filter = {Username: user[0]};
-        let updateDoc = {$set: {PixelsDrawn: PixelsDrawn + user[1]}};
+        let updateDoc = {$set: {PixelsDrawn: User.PixelsDrawn + user[1]}};
         User.updateOne(filter, updateDoc);
         //updateUser(user);
     })

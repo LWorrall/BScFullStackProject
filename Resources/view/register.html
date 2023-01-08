@@ -12,16 +12,21 @@
     </head>
     <body>
         <header>
-            <h1>Online Pixel Art</h1>
+            <img src="../style/logo52.png" alt="Logo" id="logo">
+            <h1 id="headerTitle">Online Pixel Art</h1>
         </header>
 
         <nav>
             <ul id="nav">
-                <li class="navlink"><a href="/view/home.html">Home</a></li>
-                <li class="navlink"><a href="/view/canvas.html">Canvas</a></li>
-                <li class="navlink"><a href="/view/login.html">Log In</a></li>
-                <li class="navlink"><a href="/view/register.html">Register</a></li>
-                <button id="logoutButton">Log Out</button>
+                <li class="navcontainer"><a class="navlink" href="/view/home.html">Home</a></li>
+                <li class="navcontainer"><a class="navlink" href="/view/canvas.html">Canvas</a></li>
+                <li class="navcontainer"><a class="navlink active" id="account" href>Account</a></li>
+                
+                <div id="usercontainer">
+                    <p id="usernametag"></p>
+                    <button id="logoutButton">Log Out</button>
+                </div>
+                
             </ul>
         </nav>
 
