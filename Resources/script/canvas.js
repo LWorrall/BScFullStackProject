@@ -2,6 +2,8 @@ $(window).on("load", function() {
     $(function () {
         let socket = io("http://localhost:9000");
 
+        socket.emit("request canvas");
+
         // When the client loads into the website, this socket handler populates the client's canvas with the current canvas
         socket.on("send canvas", function(canvas) {
             console.log("canvas received");
@@ -24,16 +26,25 @@ $(window).on("load", function() {
     
         // Colouring the canvas pixel with the selected colour when clicked.
         $('#canvas').on("click", ".pixel", function() {
-            let colour = $("#selectedColour").css("background-color");
-            $(this).css("background-color", colour);
-            // The function will then update the canvas array with the pixel's new colour.
-            let index = $(this).attr('id').slice(6);
-            console.log(index);
-            canvas[index] = colour;
-    
-            // Send this to the server.
-            let pixel = [index, colour];
-            socket.emit("send pixel", pixel);
+            if (localStorage.loggedInFlag != 'true') {
+                alert("You must be logged in to do that!");
+            } else if ($(this).css("background-color") == $("#selectedColour").css("background-color")) {
+                // Don't do anything if the pixel is already the selected colour.
+            } else {
+                console.log(localStorage.pixelsDrawnThisSession);
+                localStorage.pixelsDrawnThisSession = Number(localStorage.pixelsDrawnThisSession) + 1;
+                $("#pixelsDrawnCounter").text(localStorage.pixelsDrawnThisSession);
+                let colour = $("#selectedColour").css("background-color");
+                $(this).css("background-color", colour);
+                // The function will then update the canvas array with the pixel's new colour.
+                let index = $(this).attr('id').slice(6);
+                console.log(index);
+                canvas[index] = colour;
+        
+                // Send this to the server.
+                let pixel = [index, colour];
+                socket.emit("send pixel", pixel);
+            };
         })
     })
 })
@@ -43,8 +54,4 @@ $(".colour").on("click", function() {
     let colour = $(this).css("background-color");
     console.log(colour);
     $("#selectedColour").css("background-color", colour);
-})
-
-$(function() {
-    let loggedInFlag = false;
 })

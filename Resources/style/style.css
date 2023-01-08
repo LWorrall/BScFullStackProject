@@ -1,0 +1,17 @@
+#nav {
+    display: block;
+    padding: 8px;
+    background-color: #dddddd;
+}
+
+.navlink {
+    display: inline;
+}
+
+body {
+    background-color: grey;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+.error{ color: red }
+.success{ color: green; }

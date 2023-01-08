@@ -23,25 +23,19 @@ mongoose.connect(url, {useUnifiedTopology: true, useNewUrlParser: true})
 .then( () => { console.log("Connected to the databse."); })
 .catch( (err) => { console.error(`Error connecting to the database: n${err}`); });
 
+
 let userSchema = new mongoose.Schema({
     Username: String,
     Password: String,
-    Stats: [
-        { pixelsDrawn: Number },
-        { favouriteColour: String }
-    ]
-});
+    PixelsDrawn: Number,
+    FavouriteColour: String },
+    {versionKey: false}
+);
 
 let User = mongoose.model("User", userSchema);
 
-// This will create a new document in the 'users' collection in the 'projectDatabase' database on the Atlas cluster.
-new User({
-    Username: "TestUser5",
-    Password: "TestPassword5"
-}).save();
-
 // This will log all the documents in the 'users' collection to the console.
-User.find({}, function(err, result) {
+User.find({}, {Username: 1}, function(err, result) {
     if(err) { console.log(err); }
     else { console.log(`Result: ${JSON.stringify(result)}`) };
 });
@@ -58,9 +52,13 @@ for (let i = 0; i < numberOfPixels; i++) {
 
 // "On connection" handler.
 io.on("connection", function(socket) {
-    // Send a client the current canvas when they connect.
-    console.log("A client has connected, sending canvas...")
-    socket.emit("send canvas", canvas);
+    console.log("A client has connected.");
+
+    // Send a client the current canvas when navigate to the canvas page.
+    socket.on("request canvas", function() {
+        console.log("Sending canvas...");
+        socket.emit("send canvas", canvas);
+    });
 
     // When the server receives the 'send pixel' event from a client...
     socket.on("send pixel", function(pixel) {
@@ -73,19 +71,66 @@ io.on("connection", function(socket) {
 
     // When the server receives the 'register' event from a client, it will create a new user document.
     socket.on("register", function(user) {
-        console.log("A new user has registered.");
-        console.log(user[0]);
-        console.log(user[1]);
-        new User({ 
-            Username: user[0],
-            Password: user[1],
-            Stats: [
-                { pixelsDrawn: 0 },
-                { favouriteColour: ""}
-            ]
-        }).save();
+        console.log("A new user is attempting to register...");
+        User.findOne({Username: user[0]}, {Username: 1})
+        .then(
+            res => { 
+                if (res == null) {
+                    // If no matching user is found in the database, create it.
+                    console.log(`User '${user[0]}' does not already exist, creating user...`);
+                    new User({ 
+                        Username: user[0],
+                        Password: user[1],
+                        PixelsDrawn: 0,
+                        FavouriteColour: "Unknown"
+                    }).save();
+                    socket.emit("user created");
+                } else {
+                    // The query matches an already existing user in the database, another cannot be made.
+                    console.log(`User '${res}' already exists, cannot create user.`);
+                    socket.emit("user exists");
+                }
+            },
+            // Handler for any error messages returned by the query.
+            err => console.error(`Error: ${err}`),
+        );
     });
+
+    socket.on("login", function(user) {
+        console.log("A client is attempting login...");
+        User.findOne({Username: user[0], Password: user[1]}, {Username: 1})
+        .then(
+            res => { 
+                if (res == null) {
+                    // If the query returns null, then the user logging in does not exist in the database.
+                    console.log(`User '${user[0]}' does not exist.`);
+                } else {
+                    // The query matches a user in the database, they can log in.
+                    console.log(`User '${res}' has logged in.`);
+                    socket.emit("logged in", user[0]);
+                }
+            },
+            // Handler for any error messages returned by the query.
+            err => console.error(`Error: ${err}`),
+        );
+    });
+
+    socket.on("logged out", function(user) {
+        console.log(`User ${user[0]} has logged out.`);
+        console.log(`Number of pixels they drew whilst logged in: ${user[1]}.`)
+        let filter = {Username: user[0]};
+        let updateDoc = {$set: {PixelsDrawn: PixelsDrawn + user[1]}};
+        User.updateOne(filter, updateDoc);
+        //updateUser(user);
+    })
 });
+
+async function updateUser(user) {
+    let userToUpdate = await User.findOne({Username: user[0]});
+    User.PixelsDrawn = user[1];
+    await User.save();
+}
+
 
 server.listen(port, () => {
     console.log(`Listening on port ${port}.`);

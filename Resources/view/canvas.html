@@ -6,7 +6,8 @@
         <script src="https://cdn.socket.io/4.5.4/socket.io.min.js" integrity="sha384-/KNQL8Nu5gCHLqwqfQjA689Hhoqgi2S84SNUxC3roTe4EhJ9AfLkp8QiQcU8AMzI" crossorigin="anonymous"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
         
-        <link rel="stylesheet" href="../style.css" />
+        <link rel="stylesheet" href="../style/style.css" />
+        <link rel="stylesheet" href="../style/canvas.css" />
 
         <title>Online Pixel Art</title>
     </head>
@@ -21,6 +22,7 @@
                 <li class="navlink"><a href="/view/canvas.html">Canvas</a></li>
                 <li class="navlink"><a href="/view/login.html">Log In</a></li>
                 <li class="navlink"><a href="/view/register.html">Register</a></li>
+                <button id="logoutButton">Log Out</button>
             </ul>
         </nav>
 
@@ -33,6 +35,7 @@
 
             <!-- The tools div will hold the different tools the user can use. -->
             <br>
+            <p id="pixelsDrawnCounter"></p>
             <div id="tools">
                 <p>Tools</p>
                 <!-- Current colour the user has selected. -->
@@ -58,6 +61,7 @@
         </footer>
         
         <!-- Script. -->
-        <script src="../canvas.js"></script>
+        <script src="../script/canvas.js"></script>
+        <script src="../script/default.js"></script>
     </body>
 </html>
