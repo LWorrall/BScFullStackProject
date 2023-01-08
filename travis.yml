@@ -1,1 +1,13 @@
+language: node_js
+node_js:
+- node
+install:
+- npm install express
+- npm install http
+- npm install path
+- npm install socket.io
+- npm install mongoose
 
+"scripts": {
+  "start": "node server.js"
+}
