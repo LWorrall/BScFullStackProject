@@ -9,8 +9,8 @@ let port = 9000;
 
 // Set up the app and the server.
 let app = express();
-let server = https.createServer(app);
-//let server = http.createServer(app);
+//let server = https.createServer(app);
+let server = http.createServer(app);
 
 
 // Configure the app to use staics in the 'Resources' folder.
