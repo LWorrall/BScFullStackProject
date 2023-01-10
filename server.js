@@ -1,5 +1,6 @@
 let express = require("express");
 let http = require("http");
+let https = require("https");
 let path = require("path");
 let socketIo = require("socket.io");
 let mongoose = require("mongoose");
@@ -8,7 +9,8 @@ let port = 9000;
 
 // Set up the app and the server.
 let app = express();
-let server = http.createServer(app);
+let server = https.createServer(app);
+//let server = http.createServer(app);
 
 
 // Configure the app to use staics in the 'Resources' folder.
@@ -124,10 +126,10 @@ io.on("connection", function(socket) {
     })
 });
 
+// Function to update the user's stats on their MongoDB document.
 async function updateUser(user) {
     let updateUser = await User.findOne({Username: user[0]});
-    user.PixelsDrawn =+ user[1];
-    
+    updateUser.PixelsDrawn = +updateUser.PixelsDrawn + +user[1];
     await updateUser.save();
 }
 
