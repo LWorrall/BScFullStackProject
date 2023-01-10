@@ -25,7 +25,6 @@ $(window).on("load", function() {
             $("#loginResponseMessage").text(response);
         });
 
-
         socket.on("logged in", function(user) {
             // Create a cookie for the logged in user and redirect them to the canvas page.
             window.location.replace("canvas.html");
