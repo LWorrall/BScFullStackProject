@@ -118,31 +118,18 @@ io.on("connection", function(socket) {
 
     socket.on("logged out", function(user) {
         console.log(`User ${user[0]} has logged out.`);
-        console.log(`Number of pixels they drew whilst logged in: ${user[1]}.`)
-        //let filter = {Username: user[0]};
-        //let updateDoc = {$set: {PixelsDrawn: User.PixelsDrawn + user[1]}};
-        //let updateDoc = {$set: {PixelsDrawn: 100}};
-        //User.updateOne(filter, updateDoc);
-        //User.updateOne({Username: updateUser},{PixelsDrawn: 100}).save();
-        let Username = "Username";
-        let query = {};
-        query[Username] = user[0];
-        console.log(query);
-        User.updateOne(query)
-        .then(
-            User({ 
-                PixelsDrawn: 100
-            }).save()
-        );
+        console.log(`Number of pixels they drew whilst logged in: ${user[1]}.`);
+        updateUser(user);
+
     })
 });
 
 async function updateUser(user) {
-    let userToUpdate = await User.findOne({Username: user[0]});
-    User.PixelsDrawn = user[1];
-    await User.save();
+    let updateUser = await User.findOne({Username: user[0]});
+    user.PixelsDrawn =+ user[1];
+    
+    await updateUser.save();
 }
-
 
 server.listen(port, () => {
     console.log(`Listening on port ${port}.`);
