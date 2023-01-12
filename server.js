@@ -1,13 +1,23 @@
 let express = require("express");
 let http = require("http");
+let https = require("https");
+let fs = require("fs");
 let path = require("path");
 let socketIo = require("socket.io");
 let mongoose = require("mongoose");
 let port = 9000;
 
+let bcrypt = require("bcrypt");
+let saltRounds = 10;
+
+let options = {
+    key: fs.readFileSync(path.join(__dirname, "Resources/ssl/client-key.pem")),
+    cert: fs.readFileSync(path.join(__dirname, "Resources/ssl/client-cert.pem"))
+};
 
 // Set up the app and the server.
 let app = express();
+//let server = https.createServer(options, app);
 let server = http.createServer(app);
 
 
@@ -19,6 +29,7 @@ let io = socketIo(server);
 
 // Connecting to MongoDB Atlas database.
 let url = "mongodb+srv://LWorrall:DBPassword123@database-cluster.zdqauzo.mongodb.net/ProjectDatabase?retryWrites=true&w=majority";
+//let url = "mongodb+srv://user:password0451@cluster.nwnt7m0.mongodb.net/?retryWrites=true&w=majority";
 mongoose.connect(url, {useUnifiedTopology: true, useNewUrlParser: true})
 .then( () => { console.log("Connected to the databse."); })
 .catch( (err) => { console.error(`Error connecting to the database: n${err}`); });
@@ -35,12 +46,11 @@ let userSchema = new mongoose.Schema({
 let User = mongoose.model("User", userSchema);
 
 // This will log all the documents in the 'users' collection to the console.
+
 User.find({}, {Username: 1}, function(err, result) {
     if(err) { console.log(err); }
     else { console.log(`Result: ${JSON.stringify(result)}`) };
 });
-
-
 
 // generate an array used for pixels.
 let numberOfPixels = 900;
@@ -78,13 +88,16 @@ io.on("connection", function(socket) {
                 if (res == null) {
                     // If no matching user is found in the database, create it.
                     console.log(`User '${user[0]}' does not already exist, creating user...`);
-                    new User({ 
-                        Username: user[0],
-                        Password: user[1],
-                        PixelsDrawn: 0,
-                        FavouriteColour: "Unknown"
-                    }).save();
-                    socket.emit("user created");
+                    
+                    bcrypt.hash(user[1], saltRounds, function(err, hash) {
+                        new User({ 
+                            Username: user[0],
+                            Password: hash,
+                            PixelsDrawn: 0,
+                            FavouriteColour: "Unknown"
+                        }).save();
+                        socket.emit("user created");
+                    })
                 } else {
                     // The query matches an already existing user in the database, another cannot be made.
                     console.log(`User '${res}' already exists, cannot create user.`);
@@ -96,6 +109,7 @@ io.on("connection", function(socket) {
         );
     });
 
+    /*
     socket.on("login", function(user) {
         console.log("A client is attempting login...");
         User.findOne({Username: user[0], Password: user[1]}, {Username: 1})
@@ -115,34 +129,43 @@ io.on("connection", function(socket) {
             err => console.error(`Error: ${err}`),
         );
     });
+    */
+
+    socket.on("login", async function(user) {
+        console.log("A client is attempting login...");
+        try {
+            let userAttempt = await User.findOne({Username: user[0]});
+            if (userAttempt == null) {
+                console.log(`User '${user[0]}' does not exist.`);
+                socket.emit("incorrect login", "Incorrect username or password.");
+            } else {
+                await bcrypt.compare(user[1], userAttempt.Password, function(err, result) {
+                    if (result == true) {
+                        console.log(`User '${result}' has logged in.`);
+                        socket.emit("logged in", user[0]);
+                    } else if (result == false) {
+                        socket.emit("incorrect login", "Incorrect username or password.");
+                    } else { err => console.error(`Error: ${err}`); }
+                })
+            }
+        }
+        catch(err) { console.log(err); }
+    });
 
     socket.on("logged out", function(user) {
         console.log(`User ${user[0]} has logged out.`);
-        console.log(`Number of pixels they drew whilst logged in: ${user[1]}.`)
-        //let filter = {Username: user[0]};
-        //let updateDoc = {$set: {PixelsDrawn: User.PixelsDrawn + user[1]}};
-        //let updateDoc = {$set: {PixelsDrawn: 100}};
-        //User.updateOne(filter, updateDoc);
-        //User.updateOne({Username: updateUser},{PixelsDrawn: 100}).save();
-        let Username = "Username";
-        let query = {};
-        query[Username] = user[0];
-        console.log(query);
-        User.updateOne(query)
-        .then(
-            User({ 
-                PixelsDrawn: 100
-            }).save()
-        );
+        console.log(`Number of pixels they drew whilst logged in: ${user[1]}.`);
+        updateUser(user);
+
     })
 });
 
+// Function to update the user's stats on their MongoDB document.
 async function updateUser(user) {
-    let userToUpdate = await User.findOne({Username: user[0]});
-    User.PixelsDrawn = user[1];
-    await User.save();
+    let updateUser = await User.findOne({Username: user[0]});
+    updateUser.PixelsDrawn = +updateUser.PixelsDrawn + +user[1];
+    await updateUser.save();
 }
-
 
 server.listen(port, () => {
     console.log(`Listening on port ${port}.`);

@@ -6,8 +6,8 @@
         <script src="https://cdn.socket.io/4.5.4/socket.io.min.js" integrity="sha384-/KNQL8Nu5gCHLqwqfQjA689Hhoqgi2S84SNUxC3roTe4EhJ9AfLkp8QiQcU8AMzI" crossorigin="anonymous"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
         
-        <link rel="stylesheet" href="../style/style.css" />
-        <link rel="stylesheet" href="../style/canvas.css" />
+        <link rel="stylesheet" href="../style/style.css">
+        <link rel="stylesheet" href="../style/canvas.css">
 
         <title>Online Pixel Art</title>
     </head>
@@ -22,16 +22,25 @@
                 <li class="navcontainer"><a class="navlink" href="/view/home.html">Home</a></li>
                 <li class="navcontainer active"><a class="navlink" href="/view/canvas.html">Canvas</a></li>
                 <li class="navcontainer"><a class="navlink" id="account">Account</a></li>
-                
-                <div id="usercontainer">
-                    <p id="usernametag"></p>
-                    <button id="logoutButton">Log Out</button>
-                </div>
             </ul>
+            <div id="usercontainer">
+                <p id="usernametag"></p>
+                <button id="logoutButton">Log Out</button>
+            </div>
         </nav>
 
+        
+        <script src="https://unpkg.com/chai/chai.js"></script>
+        <script src="https://unpkg.com/mocha/mocha.js"></script>            
+        <script class="mocha-init">
+            mocha.setup('tdd');
+            mocha.checkLeaks();
+        </script>                
+        <script src="../../tests/canvastests.js"></script>
+        
+
         <section>
-            </div> 
+            <h2>Canvas</h2>
             <!-- The canvas will hold all of the pixels to draw on. -->
             <div id="canvas"></div>
 
