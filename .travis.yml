@@ -1,0 +1,22 @@
+before_install:
+  - sudo apt-get update
+  - sudo apt install glibc-source -y
+  - sudo apt-get -y install libxml2-dev
+language: node_js
+node_js:
+- 17
+install:
+- npm install express
+- npm install http
+- npm install https
+- npm install fs
+- npm install path
+- npm install socket.io
+- npm install mongoose
+- npm install bcrypt
+- npm install mocha
+
+# whitelist
+branches:
+  only:
+    - update
