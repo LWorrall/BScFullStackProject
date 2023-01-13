@@ -29,7 +29,8 @@ $(window).on("load", function() {
             // Create a cookie for the logged in user and redirect them to the canvas page.
             window.location.replace("canvas.html");
             localStorage.setItem('loggedInFlag', 'true');
-            localStorage.setItem('loggedInUser', user);
+            localStorage.setItem('loggedInUser', user[0]);
+            localStorage.setItem('pixelCount', user[1]);
             localStorage.setItem('pixelsDrawnThisSession', '0');
         });
     });
