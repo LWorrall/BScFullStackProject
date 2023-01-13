@@ -1,4 +1,6 @@
 before_install:
+  - sudo apt-get update
+  - sudo apt install glibc-source -y
   - sudo apt-get -y install libxml2-dev
 language: node_js
 node_js:
