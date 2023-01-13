@@ -1,3 +1,7 @@
+let chai = require("chai")
+let request = require("request");
+let mocha = require("mocha")
+
 function clickElement(element) {
     try {
         element.trigger("click");
@@ -23,18 +27,12 @@ function rgb2hex(color) {
     }
 }
 
-suite("Client Canvas Tests", function() {
 
-    test("1: Check the canvas is displayed on the page.", function() {
-        expect($("#pixel_899")).to.exist;
+mocha.it('Canvas Page', function(done) {
+    request('http://localhost:9000/view/canvas.html' , function(error, response, body) {
+        chai.assert.equal(response.statusCode, 200, "Wrong status code (page unreachable). ");
+        //chai.expect($("#pixel_0")).to.exist;
+        chai.expect(document.querySelector("pixel_0")).to.exist;
+        done();
     });
-
-    test("2: Check the canvas disallows painting when user is not logged in.", function() {
-        clickElement($("#pixel_0"));
-        let colour = rgb2hex($("#pixel_0").css("background-color"));
-        chai.assert.equal(colour, "#FFFFFF", "Pixel should be colour #FFFFFF (white).");
-    });
-
-
-    
-})
+});

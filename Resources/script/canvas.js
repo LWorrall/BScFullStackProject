@@ -1,5 +1,13 @@
 $(window).on("load", function() {
     $(function () {
+
+        // Clicking one of the colours on the palette will set it as the selected colour.
+        $(".colour").on("click", function() {
+            let colour = $(this).css("background-color");
+            console.log(colour);
+            $("#selectedColour").css("background-color", colour);
+        })
+        
         let socket = io("http://localhost:9000");
 
         socket.emit("request canvas");
@@ -44,11 +52,4 @@ $(window).on("load", function() {
             };
         })
     })
-})
-
-// Clicking one of the colours on the palette will set it as the selected colour.
-$(".colour").on("click", function() {
-    let colour = $(this).css("background-color");
-    console.log(colour);
-    $("#selectedColour").css("background-color", colour);
 })

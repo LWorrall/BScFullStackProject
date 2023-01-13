@@ -88,7 +88,6 @@ io.on("connection", function(socket) {
                 if (res == null) {
                     // If no matching user is found in the database, create it.
                     console.log(`User '${user[0]}' does not already exist, creating user...`);
-                    
                     bcrypt.hash(user[1], saltRounds, function(err, hash) {
                         new User({ 
                             Username: user[0],
@@ -109,28 +108,6 @@ io.on("connection", function(socket) {
         );
     });
 
-    /*
-    socket.on("login", function(user) {
-        console.log("A client is attempting login...");
-        User.findOne({Username: user[0], Password: user[1]}, {Username: 1})
-        .then(
-            res => { 
-                if (res == null) {
-                    // If the query returns null, then the user logging in does not exist in the database.
-                    console.log(`User '${user[0]}' does not exist.`);
-                    socket.emit("incorrect login", "Incorrect username or password.");
-                } else {
-                    // The query matches a user in the database, they can log in.
-                    console.log(`User '${res}' has logged in.`);
-                    socket.emit("logged in", user[0]);
-                }
-            },
-            // Handler for any error messages returned by the query.
-            err => console.error(`Error: ${err}`),
-        );
-    });
-    */
-
     socket.on("login", async function(user) {
         console.log("A client is attempting login...");
         try {
@@ -139,11 +116,17 @@ io.on("connection", function(socket) {
                 console.log(`User '${user[0]}' does not exist.`);
                 socket.emit("incorrect login", "Incorrect username or password.");
             } else {
-                await bcrypt.compare(user[1], userAttempt.Password, function(err, result) {
+                bcrypt.compare(user[1], userAttempt.Password, async function(err, result) {
+                    // If username and password match, user will log in.
                     if (result == true) {
-                        console.log(`User '${result}' has logged in.`);
-                        socket.emit("logged in", user[0]);
+                        let userTemp = await User.findOne({Username: user[0]});
+                        let pixels =  userTemp.PixelsDrawn;
+                        console.log(`User '${user[0]}' has logged in.`);
+                        console.log(pixels);
+                        let userDetails = [ user[0],pixels ];
+                        socket.emit("logged in", userDetails);
                     } else if (result == false) {
+                        // If something doesn't match, the user will not be able to log in.
                         socket.emit("incorrect login", "Incorrect username or password.");
                     } else { err => console.error(`Error: ${err}`); }
                 })
@@ -156,7 +139,6 @@ io.on("connection", function(socket) {
         console.log(`User ${user[0]} has logged out.`);
         console.log(`Number of pixels they drew whilst logged in: ${user[1]}.`);
         updateUser(user);
-
     })
 });
 

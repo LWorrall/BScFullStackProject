@@ -27,7 +27,6 @@ $(window).on("load", function() {
             $("#responseMessage").removeClass("error");
             $("#responseMessage").addClass("success");
             $("#responseMessage").text("Account created.");
-            // Redirect to new page.
         });
     });
 });

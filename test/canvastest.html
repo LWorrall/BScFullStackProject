@@ -3,24 +3,35 @@
     <head>
         <meta charset="utf-8">
         
+        <link rel="stylesheet" href="https://unpkg.com/mocha/mocha.css" >
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
-        <script src="https://cdn.socket.io/4.5.4/socket.io.min.js" integrity="sha384-/KNQL8Nu5gCHLqwqfQjA689Hhoqgi2S84SNUxC3roTe4EhJ9AfLkp8QiQcU8AMzI" crossorigin="anonymous"></script>
 
         <!-- Stylesheets. -->
-        <link rel="stylesheet" href="../style/style.css">
-        <link rel="stylesheet" href="../style/canvas.css">
+        <link rel="stylesheet" href="../Resources/style/style.css">
+        <link rel="stylesheet" href="../Resources/style/canvas.css">
 
         <!-- Client JavaScript. -->
-        <script src="../script/canvas.js"></script>
-        <script src="../script/default.js"></script>
+        <script src="canvas.js"></script>
 
         <title>Online Pixel Art</title>
     </head>
     <body>
-        <script src="../../tests/canvastests.js"></script>
+
+        <!-- Do not edit this section. -->
+        <div id="mocha"></div>
+
+        <script src="https://unpkg.com/chai/chai.js"></script>
+        <script src="https://unpkg.com/mocha/mocha.js"></script>
+    
+        <script class="mocha-init">
+            mocha.setup('tdd');
+            mocha.checkLeaks();
+        </script>
+
+        <script src="canvastestslocal.js"></script>
 
         <header>
-            <img src="../style/logo52.png" alt="Logo" id="logo">
+            <img src="../Resources/style/logo52.png" alt="Logo" id="logo">
             <h1 id="headerTitle">Online Pixel Art</h1>
         </header>
 
